@@ -27,7 +27,7 @@ func main() {
 	fmt.Println("\n[ + ] FILEPATH DEFINIDO [ + ] \n   -> " + dbPath)
 
 	//// mysql connection --------------
-	db, err := sql.Open("mysql", "root:@tcp(127.0.0.1:3306)/parsedb")
+	db, err := sql.Open("mysql", "root:@tcp(127.0.0.1:3306)/dbname")
 	if err != nil {
 		panic(err.Error())
 	}
@@ -36,6 +36,7 @@ func main() {
 	//// fopen --------------
 	file, err := os.Open(dbPath)
 	//path manual, comente todo o *stdin
+	//example filepath manual \/
 	//file, err := os.Open("C:/Users/ederm/Desktop/db.txt")
 	if err != nil {
 		log.Fatal(err)
@@ -47,18 +48,18 @@ func main() {
 	for scanner.Scan() {
 		explode := strings.Split(scanner.Text(), "|")
 		//seta as vars
-		var CPF, NOME, DATA string = explode[0], explode[1], explode[2]
+		var NOME, SOBRENOME, DATA string = explode[0], explode[1], explode[2]
 
 		//query
-		insert, err := db.Query("INSERT INTO teste (nome, cpf, data) VALUES (?, ?, ? )", NOME, CPF, DATA)
+		insert, err := db.Query("INSERT INTO table (nome, sobrenome, data) VALUES (?, ?, ? )", NOME, SOBRENOME, DATA)
 		if err != nil {
 			panic(err.Error())
 			//progress log
 		} else {
 			fmt.Println(
-				"\nNOME: "+NOME,
-				"\nCPF: "+CPF,
-				"\nNASCIMENTO: "+DATA,
+				"\n Nome: "+NOME,
+				"\n Sobrenome: "+SOBRENOME,
+				"\n Data: "+DATA,
 			)
 		}
 		defer insert.Close()
